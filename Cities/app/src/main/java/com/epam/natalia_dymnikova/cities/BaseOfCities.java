@@ -10,15 +10,24 @@ import java.util.Set;
  */
 public class BaseOfCities implements IBaseOfCities{
     public BaseOfCities() {
-        cities = new HashSet<>(Arrays.asList("aaa","aab","baa","aba"));
+        mCities = new HashSet<>(Arrays.asList("aaa","aab","baa","aba"));
     }
 
-    public boolean IsExist(String name) {
-        return cities.contains(name);
+    /**
+     * Check that name is exist.
+     * @param name
+     * @return true - if name is exist, false - otherwise.
+     */
+    public boolean isExist(String name) {
+        return mCities.contains(name);
     }
 
-    public Set<String> GetAllCities() {
-        return cities;
+    /**
+     * @return all cities.
+     */
+    public Set<String> getAllCities() {
+        return mCities;
     }
-    private HashSet<String> cities;
+
+    private HashSet<String> mCities;
 }

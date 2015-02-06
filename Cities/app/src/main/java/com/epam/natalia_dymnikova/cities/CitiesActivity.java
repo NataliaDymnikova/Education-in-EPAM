@@ -17,17 +17,17 @@ public class CitiesActivity extends Activity implements IActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cities);
-        textLastCity = (EditText)findViewById(R.id.textPlayer1);
-        textLastCity.setEnabled(false);
-        textPlayer = (EditText)findViewById(R.id.textPlayer2);
-        buttonOk = (Button)findViewById(R.id.buttonOk);
-        textPlayer.setEnabled(true);
-        buttonOk.setClickable(true);
+        mTextLastCity = (EditText)findViewById(R.id.textPlayer1);
+        mTextLastCity.setEnabled(false);
+        mTextPlayer = (EditText)findViewById(R.id.textPlayer2);
+        mButtonOk = (Button)findViewById(R.id.buttonOk);
+        mTextPlayer.setEnabled(true);
+        mButtonOk.setClickable(true);
 
-        game = new Game(new BaseOfCities(), this, 2);
-        buttonOk.setOnClickListener(new View.OnClickListener() {
+        mGame = new Game(new BaseOfCities(), this, 2);
+        mButtonOk.setOnClickListener(new View.OnClickListener() {
                                         public void onClick(View v) {
-                                            game.Step(textPlayer.getText().toString());
+                                            mGame.step(mTextPlayer.getText().toString());
                                         }
                                     });
     }
@@ -55,20 +55,28 @@ public class CitiesActivity extends Activity implements IActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void BeginMove(String lastString) {
-        textLastCity.setText(lastString);
-        textPlayer.setText("");
+    /**
+     * Make necessary actions before beginMove.
+     * @param lastString will put to editText - last city.
+     */
+    public void beginMove(String lastString) {
+        mTextLastCity.setText(lastString);
+        mTextPlayer.setText("");
 
     }
 
-    public void SetDisabled(String string) {
-        textLastCity.setText(string);
-        textPlayer.setEnabled(false);
-        buttonOk.setClickable(false);
+    /**
+     * Make disabled button and editText - for stop playing.
+     * @param string reason to stop playing.
+     */
+    public void setDisabled(String string) {
+        mTextLastCity.setText(string);
+        mTextPlayer.setEnabled(false);
+        mButtonOk.setClickable(false);
     }
 
-    private EditText textLastCity;
-    private EditText textPlayer;
-    private Button buttonOk;
-    private Game game;
+    private EditText mTextLastCity;
+    private EditText mTextPlayer;
+    private Button mButtonOk;
+    private Game mGame;
 }

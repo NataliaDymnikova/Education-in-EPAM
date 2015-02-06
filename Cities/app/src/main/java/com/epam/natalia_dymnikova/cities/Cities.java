@@ -8,26 +8,43 @@ import java.util.HashSet;
  */
 public class Cities {
     public Cities(IBaseOfCities baseOfCities) {
-        this.baseOfCities = baseOfCities;
-        citiesBefore = new HashSet<>();
+        mBaseOfCities = baseOfCities;
+        mCitiesBefore = new HashSet<>();
     }
 
-    public boolean IsExist(String nameCity) {
-        return baseOfCities.IsExist(nameCity);
+    /**
+     * Check that nameCity is exist in base of cities or not.
+     * @param nameCity
+     * @return true - if nameOfCity is exist, false - otherwise.
+     */
+    public boolean isExist(String nameCity) {
+        return mBaseOfCities.isExist(nameCity);
     }
 
-    public boolean WasBefore(String nameCity) {
-        return citiesBefore.contains(nameCity);
+    /**
+     * Check that nameCity was add with PutNameCity(nameCity) before or not.
+     * @param nameCity
+     * @return true - if nameOfCity was before, false - otherwise.
+     */
+    public boolean wasBefore(String nameCity) {
+        return mCitiesBefore.contains(nameCity);
     }
 
-    public void PutNameCity(String nameCity) {
-        citiesBefore.add(nameCity);
+    /**
+     * Save nameCity in set.
+     * @param nameCity name of city for save.
+     */
+    public void putNameCity(String nameCity) {
+        mCitiesBefore.add(nameCity);
     }
 
-    public HashSet<String> GetAllCities() {
-        return (HashSet)baseOfCities.GetAllCities();
+    /**
+     * @return all cities in base of cities.
+     */
+    public HashSet<String> getAllCities() {
+        return (HashSet) mBaseOfCities.getAllCities();
     }
 
-    private IBaseOfCities baseOfCities;
-    private HashSet<String> citiesBefore;
+    private IBaseOfCities mBaseOfCities;
+    private HashSet<String> mCitiesBefore;
 }
