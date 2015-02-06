@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".CitiesActivity"
+    android:focusableInTouchMode="false">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textPlayer1"
+        android:clickable="false"
+        android:enabled="false"
+        android:minHeight="50dp"
+        android:minWidth="200dp"
+        android:focusable="false"
+        android:textColor="@android:color/black"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/textPlayer2"
+        android:layout_alignEnd="@+id/textPlayer2" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textPlayer2"
+        android:background="#ffb2afff"
+        android:minHeight="50dp"
+        android:minWidth="200dp"
+        android:focusable="true"
+        android:layout_below="@+id/textPlayer1"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ok"
+        android:id="@+id/buttonOk"
+        android:layout_alignTop="@+id/textPlayer2"
+        android:layout_toEndOf="@+id/textPlayer2"
+        android:clickable="false" />
+
+</RelativeLayout>
