@@ -2,9 +2,12 @@ package com.epam.natalia_dymnikova.cities;
 
 /**
  * Created by Natalia_Dymnikova on 2/5/2015.
+ *
+ * Game Cities.
  */
-public class Game {
-    public Game(IBaseOfCities baseOfCities, IActivity activity, int num) {
+@SuppressWarnings({"ALL", "SameReturnValue"})
+class Game {
+    public Game(IBaseOfCities baseOfCities, IActivity activity) {
         mCities = new Cities(baseOfCities);
         mActivity = activity;
 
@@ -23,11 +26,11 @@ public class Game {
             if (isCorrect(newCity))
                 mCities.putNameCity(newCity);
         } catch (ExceptionCities exc) {
-            mActivity.setDisabled(exc.getMessage());
+            mActivity.setDisabled(exc.getMessage() + ", try again!");
             return;
-        } finally {
-            mLastCity = newCity;
         }
+        mLastCity = newCity;
+
         newCity = mComputer.makeMove(mLastCity);
         if (newCity == null) {
             mActivity.setDisabled("Computer lose");

@@ -9,27 +9,40 @@ import android.widget.Button;
 import android.widget.EditText;
 
 /**
- *
+ * Main class of game Cities.
  */
 public class CitiesActivity extends Activity implements IActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cities);
         mTextLastCity = (EditText)findViewById(R.id.textPlayer1);
         mTextLastCity.setEnabled(false);
         mTextPlayer = (EditText)findViewById(R.id.textPlayer2);
         mButtonOk = (Button)findViewById(R.id.buttonOk);
+        mButtonPlayAgain = (Button)findViewById(R.id.buttonPlayAgain);
         mTextPlayer.setEnabled(true);
         mButtonOk.setClickable(true);
-
-        mGame = new Game(new BaseOfCities(), this, 2);
+        mButtonPlayAgain.setVisibility(View.INVISIBLE);
         mButtonOk.setOnClickListener(new View.OnClickListener() {
-                                        public void onClick(View v) {
-                                            mGame.step(mTextPlayer.getText().toString());
-                                        }
-                                    });
+            public void onClick(View v) {
+                mGame.step(mTextPlayer.getText().toString());
+            }
+        });
+
+        mButtonPlayAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CitiesActivity.this.onCreate(savedInstanceState);
+            }
+        });
+
+        try {
+            mGame = new Game(new BaseOfCities(this), this);
+        } catch (Exception exc) {
+            setDisabled("Can't use JSON: " + exc.getMessage());
+        }
     }
 
 
@@ -70,13 +83,25 @@ public class CitiesActivity extends Activity implements IActivity {
      * @param string reason to stop playing.
      */
     public void setDisabled(String string) {
-        mTextLastCity.setText(string);
-        mTextPlayer.setEnabled(false);
-        mButtonOk.setClickable(false);
+
+        if (!string.contains("try again")) {
+            mTextLastCity.setText(string);
+            //mTextPlayer.setText(string);
+            mTextPlayer.setEnabled(false);
+            mButtonOk.setClickable(false);
+            mButtonPlayAgain.setVisibility(View.VISIBLE);
+        }
+        else {
+            String str = mTextLastCity.getText().toString().replaceAll("\\\n.*", "");
+            mTextLastCity.setText(str + "\n"
+                    + mTextPlayer.getText() + ": " + string);
+        }
+
     }
 
     private EditText mTextLastCity;
     private EditText mTextPlayer;
     private Button mButtonOk;
+    private Button mButtonPlayAgain;
     private Game mGame;
 }

@@ -18,7 +18,9 @@
         android:textColor="@android:color/black"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/textPlayer2"
-        android:layout_alignEnd="@+id/textPlayer2" />
+        android:layout_alignEnd="@+id/textPlayer2"
+        android:inputType="text"
+        tools:ignore="LabelFor" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -29,15 +31,27 @@
         android:minWidth="200dp"
         android:focusable="true"
         android:layout_below="@+id/textPlayer1"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:inputType="text"
+        tools:ignore="LabelFor" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ok"
+        android:text="@string/buttonOk"
         android:id="@+id/buttonOk"
         android:layout_alignTop="@+id/textPlayer2"
         android:layout_toEndOf="@+id/textPlayer2"
         android:clickable="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonPlayAgain"
+        android:id="@+id/buttonPlayAgain"
+        android:layout_marginTop="39dp"
+        android:layout_below="@+id/textPlayer2"
+        android:layout_alignStart="@+id/textPlayer2"
+        android:layout_alignEnd="@+id/textPlayer2" />
 
 </RelativeLayout>
