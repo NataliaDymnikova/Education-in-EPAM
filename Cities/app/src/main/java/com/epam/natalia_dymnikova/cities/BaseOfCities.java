@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
+import android.test.ActivityInstrumentationTestCase2;
 
 /**
  * Created by Natalia_Dymnikova on 2/5/2015.
@@ -50,7 +51,6 @@ public class BaseOfCities implements IBaseOfCities {
     private String read(Activity activity) throws IOException {
         InputStream inputStream = activity.getResources().openRawResource(R.raw.cities);
         byte [] buffer = new byte[inputStream.available()];
-        //noinspection StatementWithEmptyBody
         while (inputStream.read(buffer) != -1) {
         }
 
