@@ -1,7 +1,14 @@
 package com.epam.natalia_dymnikova.cities;
 
+import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -16,6 +23,7 @@ public class BaseOfCitiesTest extends ActivityInstrumentationTestCase2<CitiesAct
     @Override
     public void setUp() throws Exception {
         super.setUp();
+
         mBaseOfCities = new BaseOfCities(getActivity());
     }
 

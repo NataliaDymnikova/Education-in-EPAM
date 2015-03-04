@@ -75,7 +75,6 @@ public class CitiesActivity extends Activity implements IActivity {
     public void beginMove(String lastString) {
         mTextLastCity.setText(lastString);
         mTextPlayer.setText("");
-
     }
 
     /**
@@ -86,7 +85,6 @@ public class CitiesActivity extends Activity implements IActivity {
 
         if (!string.contains("try again")) {
             mTextLastCity.setText(string);
-            //mTextPlayer.setText(string);
             mTextPlayer.setEnabled(false);
             mButtonOk.setClickable(false);
             mButtonPlayAgain.setVisibility(View.VISIBLE);
@@ -96,7 +94,10 @@ public class CitiesActivity extends Activity implements IActivity {
             mTextLastCity.setText(str + "\n"
                     + mTextPlayer.getText() + ": " + string);
         }
+    }
 
+    public Game getGame() {
+        return mGame;
     }
 
     private EditText mTextLastCity;

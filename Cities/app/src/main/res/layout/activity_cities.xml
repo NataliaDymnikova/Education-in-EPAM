@@ -17,10 +17,8 @@
         android:focusable="false"
         android:textColor="@android:color/black"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/textPlayer2"
-        android:layout_alignEnd="@+id/textPlayer2"
-        android:inputType="text"
-        tools:ignore="LabelFor" />
+        android:layout_centerInParent="true"
+        android:inputType="text"/>
 
     <EditText
         android:layout_width="wrap_content"
