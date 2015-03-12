@@ -1,6 +1,7 @@
 package com.epam.natalia_dymnikova.camera;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -33,6 +34,7 @@ import android.hardware.Camera.PictureCallback;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -50,8 +52,11 @@ public class TakePhoto extends ActionBarActivity implements View.OnClickListener
     private Button mButtonBack;
     private Button mButtonUseVolley;
     private Button mButtonTakePhoto;
+    private Button mButtonFlash;
+    private Button mButtonFrontal;
     private RelativeLayout mRelLayout;
     private LinearLayout mLinLayout;
+    private LinearLayout mLinPhotoButtons;
     private ProgressBar mProgressBar;
     private RelativeLayout mRelativeProgress;
 
@@ -63,9 +68,11 @@ public class TakePhoto extends ActionBarActivity implements View.OnClickListener
     private HolderCallback holderCallback;
     private Camera camera;
 
-    private final int CAMERA_ID = 0;
+    private int CAMERA_ID = 0;
     private final boolean FULL_SCREEN = true;
 
+    private boolean mIsFlashOn;
+    private boolean mIsFrontal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +84,7 @@ public class TakePhoto extends ActionBarActivity implements View.OnClickListener
         mTakePhotoText = (TextView) findViewById(R.id.textView3);
         mRelLayout = (RelativeLayout) findViewById(R.id.rel_take);
         mLinLayout = (LinearLayout) findViewById(R.id.lin_take);
+        mLinPhotoButtons = (LinearLayout) findViewById(R.id.lin_photo_buttons);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.VISIBLE);
         mRelativeProgress = (RelativeLayout) findViewById(R.id.rel_progress);
@@ -96,10 +104,17 @@ public class TakePhoto extends ActionBarActivity implements View.OnClickListener
 
         mButtonTakePhoto = (Button) findViewById(R.id.button_take_picture);
         mButtonTakePhoto.setOnClickListener(this);
-        mButtonTakePhoto.setVisibility(View.INVISIBLE);
 
         mButtonUseVolley = (Button) findViewById(R.id.button_volley);
         mButtonUseVolley.setOnClickListener(this);
+
+        mButtonFlash = (Button) findViewById(R.id.button_flash);
+        mButtonFlash.setOnClickListener(this);
+
+        mButtonFrontal = (Button) findViewById(R.id.button_frontal);
+        mButtonFrontal.setOnClickListener(this);
+
+        mLinPhotoButtons.setVisibility(View.INVISIBLE);
 
         sv = (SurfaceView) findViewById(R.id.surfaceView);
         holder = sv.getHolder();
@@ -107,6 +122,10 @@ public class TakePhoto extends ActionBarActivity implements View.OnClickListener
         sv.setVisibility(View.INVISIBLE);
         holderCallback = new HolderCallback();
         holder.addCallback(holderCallback);
+
+        mIsFlashOn = false;
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT))
+            mButtonFlash.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -116,11 +135,14 @@ public class TakePhoto extends ActionBarActivity implements View.OnClickListener
             mPreview.setVisibility(View.VISIBLE);
             mLinLayout.setVisibility(View.VISIBLE);
             mRelLayout.setVisibility(View.INVISIBLE);
+            mLinPhotoButtons.setVisibility(View.INVISIBLE);
+            stopCamera();
             setTitle(R.string.preview);
         } else {
             mPreview.setVisibility(View.INVISIBLE);
             mLinLayout.setVisibility(View.INVISIBLE);
             mRelLayout.setVisibility(View.VISIBLE);
+            mLinPhotoButtons.setVisibility(View.INVISIBLE);
             setTitle(R.string.take_picture);
         }
     }
@@ -134,34 +156,33 @@ public class TakePhoto extends ActionBarActivity implements View.OnClickListener
     @Override
     protected void onPause() {
         super.onPause();
-        if (camera != null)
-            camera.release();
-        camera = null;
+        stopCamera();
     }
 
     @Override
     public void onClick(View v) {
         if (v == mButtonUseVolley) {
-            mImageLoader =  new ImageLoader(this);
+            mImageLoader = new ImageLoader(this);
             mImageLoader.loadImageByUrl(IMAGE_URL, new ImageLoaderDelegate() {
                 @Override
                 public void finishLoad(Bitmap result) {
                     mPreview.setImageBitmap(result);
+                    onResume();
                 }
             });
         } else if (v == mButtonTake || v == mButtonRetake
                 || (v == mButtonBack && mPreview.getDrawable() != null)) {
-            if (camera == null) {
-                camera = Camera.open(CAMERA_ID);
-                setPreviewSize(FULL_SCREEN);
-            }
+            startCamera();
+            if (mPreview.getDrawable() != null)
+                mPreview.setImageDrawable(null);
+            camera.startPreview();
             mLinLayout.setVisibility(View.INVISIBLE);
             mRelLayout.setVisibility(View.INVISIBLE);
             mPreview.setVisibility(View.INVISIBLE);
             mButtonTake.setVisibility(View.INVISIBLE);
-            mButtonTakePhoto.setVisibility(View.VISIBLE);
             sv.setVisibility(View.VISIBLE);
-       } else if (v == mButtonUse) {
+            mLinPhotoButtons.setVisibility(View.VISIBLE);
+        } else if (v == mButtonUse) {
             mRelativeProgress.setVisibility(View.VISIBLE);
             mAsyncLoader = new AsyncLoader();
             mAsyncLoader.startLoad(new AsyncLoaderDelegate() {
@@ -170,20 +191,44 @@ public class TakePhoto extends ActionBarActivity implements View.OnClickListener
                     mRelativeProgress.setVisibility(View.INVISIBLE);
                 }
             });
-        } else if(v == mButtonTakePhoto) {
-            mButtonTakePhoto.setVisibility(View.INVISIBLE);
+        } else if (v == mButtonTakePhoto) {
             sv.setVisibility(View.INVISIBLE);
             camera.takePicture(null, null, new PictureCallback() {
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
-                    Matrix  matrix = new Matrix();
-                    matrix.setRotate(90);
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(data , 0, data.length);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                     // ? перевернуть
                     mPreview.setImageBitmap(bitmap);
                     onResume();
                 }
             });
+            onResume();
+        } else if (v == mButtonFlash) {
+            if (camera != null) {
+                Camera.Parameters p = camera.getParameters();
+                if (mIsFlashOn) {
+                    p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                    mButtonFlash.setText("Flash on");
+                } else {
+                    p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                    mButtonFlash.setText("Flash off");
+                }
+                mIsFlashOn = !mIsFlashOn;
+                camera.setParameters(p);
+            }
+        } else if (v == mButtonFrontal) {
+            sv.setVisibility(View.INVISIBLE);
+            if (!mIsFrontal) {
+                CAMERA_ID = 1;
+                mButtonFrontal.setText("Back");
+            } else {
+                CAMERA_ID = 0;
+                mButtonFrontal.setText("Frontal");
+            }
+            mIsFrontal = !mIsFrontal;
+            stopCamera();
+            startCamera();
+            sv.setVisibility(View.VISIBLE);
         }
     }
 
@@ -269,8 +314,9 @@ public class TakePhoto extends ActionBarActivity implements View.OnClickListener
         matrix.mapRect(rectPreview);
 
         // установка размеров surface из получившегося преобразования
-        sv.getLayoutParams().height = (int) (rectPreview.bottom);
-        sv.getLayoutParams().width = (int) (rectPreview.right);
+        int paramSize = (int) Math.max(rectPreview.bottom, rectPreview.right);
+        sv.getLayoutParams().height = paramSize;
+        sv.getLayoutParams().width = paramSize;
     }
 
     void setCameraDisplayOrientation(int cameraId) {
@@ -309,5 +355,26 @@ public class TakePhoto extends ActionBarActivity implements View.OnClickListener
             }
         result = result % 360;
         camera.setDisplayOrientation(result);
+    }
+
+    private void startCamera() {
+        if (camera == null) {
+            camera = Camera.open(CAMERA_ID);
+            setPreviewSize(FULL_SCREEN);
+            if (mIsFlashOn) {
+                Camera.Parameters param = camera.getParameters();
+                param.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                camera.setParameters(param);
+            }
+        }
+        camera.startPreview();
+    }
+
+    private void stopCamera() {
+        if (camera != null) {
+            camera.stopPreview();
+            camera.release();
+        }
+        camera = null;
     }
 }
