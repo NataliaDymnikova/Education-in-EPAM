@@ -144,13 +144,6 @@
         android:layout_height="match_parent"
         android:background="#BBBBBB">
 
-        <SurfaceView
-            android:id="@+id/surfaceView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center">
-        </SurfaceView>
-
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -177,34 +170,47 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:id="@+id/lin_photo_buttons">
+            android:id="@+id/lin_photo_buttons"
+            android:clickable="false"
+            android:baselineAligned="false"
+            android:columnCount="3">
+
+            <SurfaceView
+                android:id="@+id/surfaceView"
+                android:layout_width="fill_parent"
+                android:layout_gravity="fill_horizontal"
+                android:layout_columnSpan="3"
+                android:layout_row="0">
+            </SurfaceView>
 
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:id="@+id/button_flash"
                 android:text="Flash on"
-                android:layout_gravity="center" />
+                android:layout_column="0"
+                android:layout_row="1"/>
 
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:id="@+id/button_take_picture"
                 android:text="Take photo"
-                android:layout_gravity="center" />
+                android:layout_column="1"
+                android:layout_row="1"/>
 
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:id="@+id/button_frontal"
                 android:text="Frontal"
-                android:layout_gravity="center" />
-         </LinearLayout>
+                android:layout_column="2"
+                android:layout_row="1"/>
+         </GridLayout>
 
         <LinearLayout
             android:orientation="horizontal"
