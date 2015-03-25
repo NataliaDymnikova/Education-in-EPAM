@@ -29,10 +29,12 @@ import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.Parameters;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.Policy;
 
 
 /**
@@ -161,6 +163,12 @@ public class TakePhoto extends ActionBarActivity implements View.OnClickListener
             mButtonTake.setVisibility(View.INVISIBLE);
             mButtonTakePhoto.setVisibility(View.VISIBLE);
             sv.setVisibility(View.VISIBLE);
+
+            Parameters p = camera.getParameters();
+            p.setFlashMode(Parameters.FLASH_MODE_TORCH);
+            camera.setParameters(p);
+            camera.startPreview();
+
        } else if (v == mButtonUse) {
             mRelativeProgress.setVisibility(View.VISIBLE);
             mAsyncLoader = new AsyncLoader();

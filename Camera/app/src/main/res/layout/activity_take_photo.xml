@@ -65,8 +65,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:background="#CCCCCC"
-        android:layout_below="@id/rel1"
-        >
+        android:layout_below="@id/rel1">
 
         <TextView
             android:layout_width="wrap_content"
@@ -188,9 +187,14 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/button_light"
+                android:text="Light"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/button_take_picture"
-                android:text="Take photo"
-                android:layout_gravity="center" />
+                android:text="Take photo"/>
+
          </LinearLayout>
 
         <LinearLayout
