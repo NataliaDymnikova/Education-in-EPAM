@@ -10,10 +10,10 @@ import java.util.Date;
  */
 public class Information {
 
-    public Information(Bitmap image, String text) {
+    public Information(Bitmap image, String text, Date date) {
         this.image = image;
         this.text = text;
-        date = new Date();
+        this.date = date;
     }
 
     public Bitmap getImage() {
