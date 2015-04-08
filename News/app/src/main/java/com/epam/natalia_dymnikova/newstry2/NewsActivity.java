@@ -1,6 +1,8 @@
 package com.epam.natalia_dymnikova.newstry2;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,7 +16,16 @@ public class NewsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
         NewsApplication application = (NewsApplication) getApplication();
-    }
+
+		// получаем экземпляр FragmentTransaction
+		FragmentManager fragmentManager = getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+		// добавляем фрагмент
+		NewsFragment myFragment = new NewsFragment();
+		fragmentTransaction.add(myFragment, "MyFragment");
+		fragmentTransaction.commit();
+	}
 
 
     @Override

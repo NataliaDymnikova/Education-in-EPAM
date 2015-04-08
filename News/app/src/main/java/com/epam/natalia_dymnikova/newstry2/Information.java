@@ -1,5 +1,6 @@
 package com.epam.natalia_dymnikova.newstry2;
 
+import android.graphics.Bitmap;
 import android.media.Image;
 
 import java.util.Date;
@@ -9,13 +10,13 @@ import java.util.Date;
  */
 public class Information {
 
-    public Information(Image image, String text) {
+    public Information(Bitmap image, String text) {
         this.image = image;
         this.text = text;
         date = new Date();
     }
 
-    public Image getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
@@ -27,7 +28,7 @@ public class Information {
         return date;
     }
 
-    private Image image;
+    private Bitmap image;
     private String text;
     private Date date;
 

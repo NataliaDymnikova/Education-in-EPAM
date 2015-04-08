@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <fragment
+
+	<fragment
         android:name="com.epam.natalia_dymnikova.newstry2.NewsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
