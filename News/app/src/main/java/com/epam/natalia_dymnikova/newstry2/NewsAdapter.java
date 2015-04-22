@@ -35,12 +35,13 @@ import java.util.List;
  */
 public class NewsAdapter extends ArrayAdapter<Information> {
 	private final Context context;
-	private final List<Information> information;
+	//private final List<Information> information;
 
 	public NewsAdapter(Context context, List<Information> information) {
 		super(context, R.layout.news_item, information);
+
 		this.context = context;
-		this.information = information;
+		//this.information = information;
 	}
 
 	@Override
@@ -53,13 +54,14 @@ public class NewsAdapter extends ArrayAdapter<Information> {
 		TextView textViewData = (TextView) view.findViewById(R.id.data);
 		ImageView imageView = (ImageView) view.findViewById(R.id.image);
 
-		imageView.setImageBitmap(information.get(position).getImage());
-		textView.setText(information.get(position).getText());
+		imageView.setImageBitmap(getItem(position).getImage());
+		textView.setText(getItem(position).getText());
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
-		Date date = information.get(position).getDate();
+		Date date = getItem(position).getDate();
 		textViewData.setText(dateFormat.format(date));
 
 		return view;
 	}
+
 }

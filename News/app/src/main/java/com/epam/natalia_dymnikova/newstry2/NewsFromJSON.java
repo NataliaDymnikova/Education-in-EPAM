@@ -46,7 +46,7 @@ public class NewsFromJSON implements INews {
 		if (begin > mListInformation.size()) {
 			return new ArrayList<>();
 		} else {
-			return mListInformation.subList(begin, Math.min(begin + number, mListInformation.size()));
+			return new ArrayList<>(mListInformation.subList(begin, Math.min(begin + number, mListInformation.size())));
 		}
 	}
 
