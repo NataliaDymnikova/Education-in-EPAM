@@ -15,37 +15,39 @@
 */
 package com.epam.natalia_dymnikova.newstry2;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
- * Created by Natalia_Dymnikova on 4/8/2015.
+ * Created by Natalia_Dymnikova on 4/22/2015.
  */
-public class NewsHardCode implements INews {
+public class NewsFromJSON implements INews {
+	private ArrayList<Information> mListInformation;
 
-	private Context context;
-
-	public NewsHardCode(Context context) {
-		this.context = context;
+	public NewsFromJSON(Context context) {
+		mListInformation = ((NewsApplication)((Activity) context).getApplication()).getInformation();
 	}
 
 	public List<Information> getNewNews(int begin, int number) {
-		if (begin > 20)
-			return null;
-		ArrayList<Information> listInformation = new ArrayList<>();
-		for (int i = begin; i < begin + number && i < 20; i++) {
-			listInformation.add(new Information(
-					((BitmapDrawable)context.getResources().getDrawable(R.drawable.picture)).getBitmap(),
-					i+1 + ") alalal lalalalalala llalalal!!!alalalalsssssssssssssssssssssssssssssssa"
-					, new Date()));
+		if (begin > mListInformation.size()) {
+			return new ArrayList<>();
+		} else {
+			return mListInformation.subList(begin, Math.min(begin + number, mListInformation.size()));
 		}
-		return listInformation;
 	}
+
 }

@@ -1,0 +1,5 @@
+{ news : [["picture.png", "aaa", "1 03 2015"],
+		["picture.png", "bbb", "1 03 2015"],
+        ["ure.png", "ccc", "05 3 2015"]
+	]
+}

@@ -26,6 +26,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,7 +55,10 @@ public class NewsAdapter extends ArrayAdapter<Information> {
 
 		imageView.setImageBitmap(information.get(position).getImage());
 		textView.setText(information.get(position).getText());
-		textViewData.setText(information.get(position).getDate().toString());
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+		Date date = information.get(position).getDate();
+		textViewData.setText(dateFormat.format(date));
 
 		return view;
 	}
